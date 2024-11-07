@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshop-deployment
+  namespace: kubeapi-inspector-workshop
+  labels:
+    app: workshop-apiserver
+spec:
+  selector:
+    matchLabels:
+      app: workshop-apiserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: workshop-apiserver
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: workshop-apiserver-sa
+      containers:
+        - ports:
+            - name: apiservice
+              containerPort: 443
+              protocol: TCP
+          command:
+            - /workshop-apiserver
+          args:
+            - --etcd-cafile=/config/pki/etcd/ca.crt
+            - --etcd-certfile=/config/pki/apiserver-etcd-client.crt
+            - --etcd-keyfile=/config/pki/apiserver-etcd-client.key
+            - --etcd-servers=https://10.12.183.26:2379
+          image: workshop-apiserver:latest
+          imagePullPolicy: IfNotPresent
+          name: apiserver
+          volumeMounts:
+            - name: kubernetes-volume
+              mountPath: /config
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128M
+            limits:
+                cpu: 200m
+                memory: 256M
+
+      volumes:
+        - name: kubernetes-volume
+          hostPath:
+            path: /etc/kubernetes

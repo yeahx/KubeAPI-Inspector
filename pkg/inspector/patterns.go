@@ -1,0 +1,38 @@
+package inspector
+
+// 定义敏感字段的正则表达式模式
+var sensitivePatterns = []string{
+	`(?i)password`, // match "password"，not case-sensitive
+	`(?i)passwd`,
+	`(?i)pwd`,
+	`(?i)secret`,
+	`(?i)token`,
+	`(?i)api[_-]?key`,
+	`(?i)auth[_-]?token`,
+	`(?i)kubeconfig`,
+	`(?i)private[_-]?key`,
+	`(?i)certificate`,
+	`(?i)access[_-]?key`,
+	`(?i)secret[_-]?key`,
+	`(?i)aws[_-]?access[_-]?key[_-]?id`,
+	`(?i)aws[_-]?secret[_-]?access[_-]?key`,
+	`(?i)rsa[_-]?private[_-]?key`,
+	`(?i)dsa[_-]?private[_-]?key`,
+	`(?i)ecdsa[_-]?private[_-]?key`,
+	`(?i)config$`,
+	`(?i)env`,
+	`(?i)credentials?`,
+	`(?i)dockerconfigjson`,
+	`(?i)^.*[_-]?config$`,
+	`(?i)^.*[_-]?secret$`,
+	`(?i)^.*[_-]?file$`,
+	`(?i)^.*[_-]?key$`,
+	`(?i)^.*[_-]?cert$`,
+	`(?i)^.*[_-]?credential$`,
+	`(?i)host`,
+	`(?i)port`,
+	`(?i)url`,
+	`(?i)connection[_-]?string`,
+	`(?i)database[_-]?url`,
+	`(?i)command`,
+}

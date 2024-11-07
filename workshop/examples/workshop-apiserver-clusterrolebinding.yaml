@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: workshop-apiserver-crb
+  labels:
+    app: workshop-apiserver
+subjects:
+  - kind: ServiceAccount
+    name: workshop-apiserver-sa
+    namespace: kubeapi-inspector-workshop
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io

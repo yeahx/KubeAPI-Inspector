@@ -1,0 +1,29 @@
+apiVersion: apiregistration.k8s.io/v1
+kind: APIService
+metadata:
+  name: v1alpha1.workshop.io
+spec:
+  version: v1alpha1
+  versionPriority: 1000
+  group: workshop.io
+  groupPriorityMinimum: 10000
+  insecureSkipTLSVerify: true
+  service:
+    name: workshop-apiservice
+    namespace: kubeapi-inspector-workshop
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workshop-apiservice
+  namespace: kubeapi-inspector-workshop
+  labels:
+    app: workshop-apiservice
+spec:
+  ports:
+    - name: apiservice
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: workshop-apiserver

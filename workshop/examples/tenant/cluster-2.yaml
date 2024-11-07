@@ -1,0 +1,9 @@
+apiVersion: workshop.io/v1alpha1
+kind: Cluster
+metadata:
+  name: cluster-2
+spec:
+  tenant: workshop-tenant-2
+  name: cluster-2
+  apiserver: http://10.12.233.1:6443
+  kubeconfig: Aa==
