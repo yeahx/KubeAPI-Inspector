@@ -42,6 +42,7 @@ CWD: /repo/workshop/
 2. build workshop image with docker `docker build . -t workshop-apiserver:latest`
 3. open workshop-apiserver-deployment.yaml, change `$.spec.template.spec.containers[0].args` 
 4. create workshop k8s resource `cat examples/{namespace,apiserviceservice,workshop-apiserver-sa,workshop-apiserver-clusterrolebinding,workshop-apiserver-deployment}.yaml | kubectl apply -f -`
+5. create demo cluster resource and tenant accounts `kubectl apply -f examples/tenant`
 
 ## License
 MIT License

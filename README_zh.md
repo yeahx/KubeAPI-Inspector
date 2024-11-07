@@ -42,3 +42,4 @@
 2. 使用 docker 构建 workshop 镜像 `docker build . -t workshop-apiserver:latest`
 3. 打开 workshop-apiserver-deployment.yaml，修改 `$.spec.template.spec.containers[0].args`
 4. 创建 workshop k8s 资源 `cat examples/{namespace,apiserviceservice,workshop-apiserver-sa,workshop-apiserver-clusterrolebinding,workshop-apiserver-deployment}.yaml | kubectl apply -f -`
+5. 创建 demo 的集群 resource 及租户的服务账号 `kubectl apply -f examples/tenant`
