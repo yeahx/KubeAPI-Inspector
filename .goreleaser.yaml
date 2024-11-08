@@ -1,0 +1,50 @@
+version: 2
+
+project_name: KubeAPI-Inspector
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goos:
+      - linux
+      - darwin
+    main: ./cmd/inspector/
+    binary: inspector
+    goarch:
+      - amd64
+      - arm64
+    # ensures mod timestamp to be the commit timestamp
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      # trims path
+      - -trimpath
+    ldflags:
+      # use commit date instead of current date as main.date
+      # only needed if you actually use those things in your main package, otherwise can be ignored.
+      - -s -w
+
+# proxies from the go mod proxy before building
+# https://goreleaser.com/customization/gomod
+gomod:
+  proxy: true
+
+# config the checksum filename
+# https://goreleaser.com/customization/checksum
+checksum:
+  name_template: "checksums.txt"
+
+# create a docker image
+# https://goreleaser.com/customization/docker
+#dockers:
+#  - image_templates:
+#      - "yeahx/workshop-apiserver:{{ .Tag }}"
+#      - "yeahx/workshop-apiserver:latest"
+#    dockerfile: workshop/Dockerfile
+#    build_flag_templates:
+#      - "--pull"
+#      - "--label=org.opencontainers.image.created={{.Date}}"
+#      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+#      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+#      - "--label=org.opencontainers.image.version={{.Version}}"
+#      - "--label=org.opencontainers.image.source={{.GitURL}}"
