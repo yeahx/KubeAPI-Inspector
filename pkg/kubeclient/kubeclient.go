@@ -74,7 +74,7 @@ func NewKubeClient(kubeconfig, namespace string) (*KubeClient, error) {
 			return nil, fmt.Errorf("failed to build config from path %s: %w", kubeconfig, err)
 		}
 	}
-
+	config.Insecure = true
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create kubeclient: %w", err)
