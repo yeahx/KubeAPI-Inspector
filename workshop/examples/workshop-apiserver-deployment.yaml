@@ -25,16 +25,23 @@ spec:
           command:
             - /workshop-apiserver
           args:
-            - --etcd-cafile=/config/pki/etcd/ca.crt
-            - --etcd-certfile=/config/pki/apiserver-etcd-client.crt
-            - --etcd-keyfile=/config/pki/apiserver-etcd-client.key
-            - --etcd-servers=https://10.12.183.26:2379
+            - --etcd-cafile=/certs/ca.crt
+            - --etcd-certfile=/certs/etcd-client.crt
+            - --etcd-keyfile=/certs/etcd-client.key
+            - --etcd-servers=$(ETCD_SERVERS)
+          env:
+            - name: ETCD_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: etcd-config
+                  key: etcd-servers
           image: workshop-apiserver:latest
           imagePullPolicy: IfNotPresent
           name: apiserver
           volumeMounts:
-            - name: kubernetes-volume
-              mountPath: /config
+            - name: etcd-certs
+              mountPath: /certs
+              readOnly: true
           resources:
             requests:
               cpu: 100m
@@ -44,6 +51,7 @@ spec:
                 memory: 256M
 
       volumes:
-        - name: kubernetes-volume
-          hostPath:
-            path: /etc/kubernetes
+        - name: etcd-certs
+          secret:
+            secretName: etcd-certs
+            defaultMode: 0400
