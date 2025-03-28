@@ -38,9 +38,9 @@ CWD: /repo/
 2. or use docker to build `docker build . -t inspector:latest`
 ### build & deploy workshop steps
 CWD: /repo/workshop/
-1. setup a kubernetes cluster, maybe you should use minikube.
+1. setup a kubernetes cluster, maybe you should use minikube, e.g. `minikube start --kubernetes-version='v1.23.17'`
 2. build workshop image with docker `docker build . -t workshop-apiserver:latest`
-3. open workshop-apiserver-deployment.yaml, change `$.spec.template.spec.containers[0].args` 
+3. deploy etcd for workshop-apiserver `cd workshop/examples/etcd && ./generate-certs.sh && deploy.sh`
 4. create workshop k8s resource `cat examples/{namespace,apiserviceservice,workshop-apiserver-sa,workshop-apiserver-clusterrolebinding,workshop-apiserver-deployment}.yaml | kubectl apply -f -`
 5. create demo cluster resource and tenant accounts `kubectl apply -f examples/tenant`
 

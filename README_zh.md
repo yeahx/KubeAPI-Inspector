@@ -38,8 +38,8 @@
 ### 构建和部署 workshop 步骤
 * 当前工作目录：/repo/workshop/
 
-1. 设置一个 Kubernetes 集群，可以使用 minikube。
+1. 设置一个 Kubernetes 集群，可以使用 minikube，如 `minikube start --kubernetes-version='v1.23.17'`
 2. 使用 docker 构建 workshop 镜像 `docker build . -t workshop-apiserver:latest`
-3. 打开 workshop-apiserver-deployment.yaml，修改 `$.spec.template.spec.containers[0].args`
+3. 部署 workshop-apiserver 使用的etcd `cd workshop/examples/etcd && ./generate-certs.sh && deploy.sh`
 4. 创建 workshop k8s 资源 `cat examples/{namespace,apiserviceservice,workshop-apiserver-sa,workshop-apiserver-clusterrolebinding,workshop-apiserver-deployment}.yaml | kubectl apply -f -`
 5. 创建 demo 的集群 resource 及租户的服务账号 `kubectl apply -f examples/tenant`
