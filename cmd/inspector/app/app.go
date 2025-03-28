@@ -44,6 +44,11 @@ func Run() {
 		skipCheckSensitiveField = true
 	}
 
+	_, err = scan.DiscoveryAPIServiceBySRV()
+	if err != nil {
+		fmt.Printf("[-] Failed to discovery apiservice by srv: %s\n", err)
+	}
+
 	for k, v := range kubeClient.Resources {
 		if utils.IsStatusSubresource(v.Name) {
 			continue

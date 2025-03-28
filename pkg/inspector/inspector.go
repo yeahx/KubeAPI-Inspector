@@ -3,12 +3,15 @@ package inspector
 import (
 	"errors"
 	"fmt"
-	openapi_v2 "github.com/google/gnostic-models/openapiv2"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"kubeinspector/pkg/kubeclient"
 	"kubeinspector/pkg/utils"
 	"regexp"
 	"strings"
+
+	openapi_v2 "github.com/google/gnostic-models/openapiv2"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+
+	"net"
 )
 
 type Inspector struct {
@@ -18,6 +21,14 @@ type Inspector struct {
 	sensitiveCheckFunc   func(p string) bool
 	pathBodyParameterMap map[string]*openapi_v2.BodyParameter    // map[pathItem.Name]*BodyParameter
 	pathPathParameterMap map[string]*openapi_v2.NonBodyParameter // map[pathItem.Name]*NonBodyParameter
+}
+
+// DNSServiceInfo
+type DNSServiceInfo struct {
+	Target   string
+	Port     uint16
+	Priority uint16
+	Weight   uint16
 }
 
 func NewInspector(client *kubeclient.KubeClient, sensitiveCheckFunc func(string) bool) *Inspector {
@@ -40,8 +51,42 @@ func NewInspector(client *kubeclient.KubeClient, sensitiveCheckFunc func(string)
 	return i
 }
 
-// DiscoveryAPIServiceBySRV TODO
-func (i *Inspector) DiscoveryAPIServiceBySRV() {}
+// DiscoveryAPIServiceBySRV
+func (i *Inspector) DiscoveryAPIServiceBySRV() ([]DNSServiceInfo, error) {
+	fmt.Printf("[*] Starting discovery api service by coredns\n")
+
+	dnsPatterns := []string{
+		"any.any.svc.cluster.local.",
+		"any.any.any.svc.cluster.local.",
+	}
+
+	var results []DNSServiceInfo
+	for _, dns := range dnsPatterns {
+		_, srvs, err := net.LookupSRV("", "", dns)
+		if err != nil {
+			fmt.Printf("[*] DNS Query Eror %s: %s\n", dns, err.Error())
+			continue
+		}
+
+		for _, srv := range srvs {
+
+			results = append(results, DNSServiceInfo{
+				Target:   srv.Target,
+				Port:     srv.Port,
+				Priority: srv.Priority,
+				Weight:   srv.Weight,
+			})
+		}
+	}
+
+	// print result
+	for _, r := range results {
+		fmt.Printf("[+] Service: %s:%d\n",
+			r.Target, r.Port)
+	}
+
+	return results, nil
+}
 
 func (i *Inspector) DetectObjectLeak(group, version, resource string) error {
 	var errors []error

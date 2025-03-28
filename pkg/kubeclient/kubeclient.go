@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	openapi_v2 "github.com/google/gnostic-models/openapiv2"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/client-go/discovery"
 	"kubeinspector/pkg/utils"
 	"log"
 	"os"
 	"strings"
+
+	openapi_v2 "github.com/google/gnostic-models/openapiv2"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/discovery"
 
 	authorizationv1 "k8s.io/api/authorization/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -74,7 +75,7 @@ func NewKubeClient(kubeconfig, namespace string) (*KubeClient, error) {
 			return nil, fmt.Errorf("failed to build config from path %s: %w", kubeconfig, err)
 		}
 	}
-	config.Insecure = true
+	// config.Insecure = true
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create kubeclient: %w", err)
