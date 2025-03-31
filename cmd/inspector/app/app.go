@@ -3,9 +3,10 @@ package app
 import (
 	"flag"
 	"fmt"
-	"kubeinspector/pkg/inspector"
-	"kubeinspector/pkg/kubeclient"
-	"kubeinspector/pkg/utils"
+
+	"github.com/yeahx/kubeapi-inspector/pkg/inspector"
+	"github.com/yeahx/kubeapi-inspector/pkg/kubeclient"
+	"github.com/yeahx/kubeapi-inspector/pkg/utils"
 )
 
 func Run() {

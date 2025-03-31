@@ -5,10 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"kubeinspector/pkg/utils"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/yeahx/kubeapi-inspector/pkg/utils"
 
 	openapi_v2 "github.com/google/gnostic-models/openapiv2"
 	"k8s.io/apimachinery/pkg/runtime"

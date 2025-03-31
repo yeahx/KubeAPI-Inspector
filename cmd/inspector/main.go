@@ -1,7 +1,7 @@
 package main
 
 import (
-	"kubeinspector/cmd/inspector/app"
+	"github.com/yeahx/kubeapi-inspector/cmd/inspector/app"
 )
 
 func main() {

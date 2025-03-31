@@ -3,10 +3,11 @@ package inspector
 import (
 	"errors"
 	"fmt"
-	"kubeinspector/pkg/kubeclient"
-	"kubeinspector/pkg/utils"
 	"regexp"
 	"strings"
+
+	"github.com/yeahx/kubeapi-inspector/pkg/kubeclient"
+	"github.com/yeahx/kubeapi-inspector/pkg/utils"
 
 	openapi_v2 "github.com/google/gnostic-models/openapiv2"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
