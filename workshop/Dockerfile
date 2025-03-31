@@ -15,7 +15,6 @@ COPY pkg/ pkg/
 
 ENV GO111MODULE on
 ENV DEBUG true
-ENV GOPROXY http://goproxy.cn,direct
 
 # Build workshop-apiserver
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} GO111MODULE=on go build -o workshop-apiserver cmd/main.go
