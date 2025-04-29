@@ -11,7 +11,7 @@ import (
 
 func Run() {
 	var kubeconfig, namespace, token, server string
-	var skipCheckSensitiveField bool
+	var skipCheckSensitiveField, insecureSkipTLS bool
 
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "Path to a kubeconfig. Only required if out-of-cluster.")
 	//flag.BoolVar(&skipNativeAPI, "skip-native-api", true, "")
@@ -19,9 +19,10 @@ func Run() {
 	flag.StringVar(&token, "token", "", "token for access apiserver. Only required if out-of-cluster.")
 	flag.StringVar(&server, "server", "", "target apiserver address.")
 	flag.BoolVar(&skipCheckSensitiveField, "skipCheckSensitiveField", false, "if true skip check resource sensitive field")
+	flag.BoolVar(&insecureSkipTLS, "insecure-skip-tls-verify", false, "if true, skip TLS verification for Kubernetes API server")
 	flag.Parse()
 
-	kubeClient, err := kubeclient.NewKubeClient(kubeconfig, namespace)
+	kubeClient, err := kubeclient.NewKubeClient(kubeconfig, namespace, insecureSkipTLS)
 	if err != nil {
 		fmt.Printf("[-] Failed to create kubeclient: %s\nmake sure kubeconfig is valided.", err)
 		return

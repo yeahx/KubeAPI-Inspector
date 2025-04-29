@@ -45,7 +45,7 @@ type Resource struct {
 }
 
 // NewKubeClient creates a Kubernetes client.
-func NewKubeClient(kubeconfig, namespace string) (*KubeClient, error) {
+func NewKubeClient(kubeconfig, namespace string, insecureSkipTLS bool) (*KubeClient, error) {
 	var config *rest.Config
 	var err error
 	var inCluster bool
@@ -76,7 +76,15 @@ func NewKubeClient(kubeconfig, namespace string) (*KubeClient, error) {
 			return nil, fmt.Errorf("failed to build config from path %s: %w", kubeconfig, err)
 		}
 
-		config.Insecure = true
+		// Set Insecure to true (skip TLS verification) only if the flag is set
+		// If the flag is not set, set Insecure to false if certificate data or files are provided
+		if insecureSkipTLS {
+			config.Insecure = true
+		} else if config.CAData != nil || config.CertData != nil || config.CAFile != "" || config.CertFile != "" || config.KeyFile != "" {
+			config.Insecure = false
+		} else {
+			config.Insecure = true
+		}
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
